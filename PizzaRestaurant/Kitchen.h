@@ -8,8 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "Pizza.h"
+#import "KitchenDelegate.h"
 
 @interface Kitchen : NSObject
+
+@property (nonatomic,strong) id<KitchenDelegate> manager;
+
 - (PizzaSize)pizzaSizeFromString:(NSString *)sizeString;
 - (NSString *)sizeStringFromPizzaSize:(PizzaSize)size;
 

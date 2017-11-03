@@ -11,7 +11,21 @@
 @implementation Kitchen
 
 - (Pizza *)makePizzaWithSize:(PizzaSize)size toppings:(NSArray *)toppings {
-    return [[Pizza alloc]initWithPizzaSize:size toppings:toppings];
+    if (self.manager != nil) {
+        if (![self.manager kitchen:self
+             shouldMakePizzaOfSize:size
+                       andToppings:toppings]) {
+            return nil;
+        }
+        if ([self.manager kitchenShouldUpgradeOrder:self]) {
+            size = Large;
+        }
+    }
+    Pizza *pizza = [[Pizza alloc]initWithPizzaSize:size toppings:toppings];
+    if ([self.manager respondsToSelector:@selector(kitchenDidMakePizza:)]) {
+        [self.manager kitchenDidMakePizza:pizza];
+    }
+    return pizza;
 }
 
 - (PizzaSize)pizzaSizeFromString:(NSString *)sizeString {
@@ -38,10 +52,5 @@
 + (Pizza *)largePepperoni {
     return [Pizza largePepperoni];
 }
-
-
-
-
-
-
+ 
 @end
